@@ -35,3 +35,4 @@ build/
 ### Credentials and CI ###
 application-dev.properties
 docker-compose.yml
+/logs/
