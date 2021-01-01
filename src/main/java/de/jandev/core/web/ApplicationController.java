@@ -50,7 +50,7 @@ public class ApplicationController {
 
         if (error != null) {
             LOGGER.info(MessageFormatter.format(LogMessage.OAUTH_CALLBACK_FAILED, error, error_description).getMessage());
-            response.setHeader(LOCATION, getFullUrl() + "/login?error");
+            response.setHeader(LOCATION, getFullUrl() + "/login?error=true");
             response.setStatus(302);
             return;
         }
@@ -72,26 +72,26 @@ public class ApplicationController {
                         user = Optional.of(userService.createUser(newUser));
                     } catch (ApplicationException e) {
                         LOGGER.warn(LogMessage.USER_CANNOT_CREATE, user, e);
-                        response.setHeader(LOCATION, getFullUrl() + "/login?error");
+                        response.setHeader(LOCATION, getFullUrl() + "/login?error=true");
                         response.setStatus(302);
                         return;
                     }
                 }
 
                 String jwt = createToken(user.get());
-                Cookie jwtCookie = new Cookie("token", jwt);
-                jwtCookie.setSecure(true);
-                jwtCookie.setDomain("kantanbot.com");
-                response.setHeader(LOCATION, getFullUrl() + "/login");
-                response.addCookie(jwtCookie);
+                //Cookie jwtCookie = new Cookie("token", jwt);
+                //jwtCookie.setSecure(true);
+                //jwtCookie.setDomain("kantanbot.com");
+                response.setHeader(LOCATION, getFullUrl() + "/login#token=" + jwt);
+                //response.addCookie(jwtCookie);
 
             } else {
                 LOGGER.info(MessageFormatter.format(LogMessage.OAUTH_AUTHENTICATION_FAILED_USER_ERROR, token).getMessage());
-                response.setHeader(LOCATION, getFullUrl() + "/login?error");
+                response.setHeader(LOCATION, getFullUrl() + "/login?error=true");
             }
         } else {
             LOGGER.info(MessageFormatter.format(LogMessage.OAUTH_AUTHENTICATION_FAILED_ACCESS_TOKEN, code).getMessage());
-            response.setHeader(LOCATION, getFullUrl() + "/login?error");
+            response.setHeader(LOCATION, getFullUrl() + "/login?error=true");
         }
         response.setStatus(302);
     }
