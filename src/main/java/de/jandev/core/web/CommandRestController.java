@@ -4,6 +4,8 @@ import de.jandev.core.exception.ApplicationException;
 import de.jandev.core.model.command.ActionCommand;
 import de.jandev.core.model.command.Command;
 import de.jandev.core.model.command.SimpleTextCommand;
+import de.jandev.core.model.command.dto.ActionCommandIn;
+import de.jandev.core.model.command.dto.SimpleTextCommandIn;
 import de.jandev.core.service.CommandService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -34,13 +36,13 @@ public class CommandRestController implements ApplicationRestController {
 
     @PreAuthorize("hasAnyAuthority('USER','ADMIN')")
     @PostMapping("/actions")
-    public ActionCommand createActionCommand(@RequestBody ActionCommand command) throws ApplicationException {
+    public ActionCommand createActionCommand(@RequestBody ActionCommandIn command) throws ApplicationException {
         return commandService.createActionCommand(getAuthenticatedUserId(), command);
     }
 
     @PreAuthorize("hasAnyAuthority('USER','ADMIN')")
     @PostMapping("/texts")
-    public SimpleTextCommand createSimpleTextCommand(@RequestBody SimpleTextCommand command) throws ApplicationException {
+    public SimpleTextCommand createSimpleTextCommand(@RequestBody SimpleTextCommandIn command) throws ApplicationException {
         return commandService.createSimpleTextCommand(getAuthenticatedUserId(), command);
     }
 }

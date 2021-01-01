@@ -4,6 +4,8 @@ import de.jandev.core.exception.ApplicationException;
 import de.jandev.core.model.command.ActionCommand;
 import de.jandev.core.model.command.Command;
 import de.jandev.core.model.command.SimpleTextCommand;
+import de.jandev.core.model.command.dto.ActionCommandIn;
+import de.jandev.core.model.command.dto.SimpleTextCommandIn;
 import de.jandev.core.repository.ActionCommandRepository;
 import de.jandev.core.repository.CommandRepository;
 import de.jandev.core.repository.SimpleTextCommandRepository;
@@ -46,7 +48,7 @@ public class CommandService {
         });
     }
 
-    public ActionCommand createActionCommand(String userId, ActionCommand command) throws ApplicationException {
+    public ActionCommand createActionCommand(String userId, ActionCommandIn command) throws ApplicationException {
         if (actionCommandRepository.existsByPrefixAndNameAndUserId(command.getPrefix(), command.getName(), userId)) {
             LOGGER.info(LogMessage.COMMAND_ALREADY_EXISTS, command.getName(), command.getPrefix(), userId);
             throw new ApplicationException(HttpStatus.BAD_REQUEST, MessageFormatter.arrayFormat(LogMessage.COMMAND_ALREADY_EXISTS, new Object[]{command.getName(), command.getPrefix(), userId}).getMessage());
@@ -61,7 +63,7 @@ public class CommandService {
         return actionCommandRepository.save(actionCommand);
     }
 
-    public SimpleTextCommand createSimpleTextCommand(String userId, SimpleTextCommand command) throws ApplicationException {
+    public SimpleTextCommand createSimpleTextCommand(String userId, SimpleTextCommandIn command) throws ApplicationException {
         if (simpleTextCommandRepository.existsByPrefixAndNameAndUserId(command.getPrefix(), command.getName(), userId)) {
             LOGGER.info(LogMessage.COMMAND_ALREADY_EXISTS, command.getName(), command.getPrefix(), userId);
             throw new ApplicationException(HttpStatus.BAD_REQUEST, MessageFormatter.arrayFormat(LogMessage.COMMAND_ALREADY_EXISTS, new Object[]{command.getName(), command.getPrefix(), userId}).getMessage());

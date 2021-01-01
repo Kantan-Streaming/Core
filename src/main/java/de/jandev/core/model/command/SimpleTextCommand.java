@@ -6,7 +6,6 @@ import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 
-
 @EqualsAndHashCode(callSuper = true)
 @Entity
 @AllArgsConstructor
