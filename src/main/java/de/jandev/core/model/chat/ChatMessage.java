@@ -27,10 +27,10 @@ public class ChatMessage {
     private int id;
 
     @ManyToOne(optional = false)
-    private User from;
+    private User user;
 
-    @ManyToOne(optional = false)
-    private User to;
+    @Column(nullable = false)
+    private String sender;
 
     @Size(max = 255) // Just a note
     @Column(nullable = false)
