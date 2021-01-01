@@ -15,7 +15,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class UserService {
@@ -37,12 +36,22 @@ public class UserService {
         return userRepository.findAll();
     }
 
-    public Optional<User> getUser(String id) {
-        return userRepository.findById(id);
+    public User getUser(String id) throws ApplicationException {
+        return userRepository.findById(id).orElseThrow(() -> {
+            LOGGER.info(LogMessage.USER_NOT_FOUND, id);
+            return new ApplicationException(HttpStatus.NOT_FOUND, MessageFormatter.format(LogMessage.USER_NOT_FOUND, id).getMessage());
+        });
     }
 
-    public Optional<User> getUserByUsername(String username) {
-        return userRepository.findByUsername(username);
+    public User getUserByUsername(String username) throws ApplicationException {
+        return userRepository.findByUsername(username).orElseThrow(() -> {
+            LOGGER.info(LogMessage.USER_NOT_FOUND, username);
+            return new ApplicationException(HttpStatus.NOT_FOUND, MessageFormatter.format(LogMessage.USER_NOT_FOUND, username).getMessage());
+        });
+    }
+
+    public boolean isUserIdExist(String id) {
+        return userRepository.existsById(id);
     }
 
     public User createUser(User user) throws ApplicationException {
@@ -54,6 +63,13 @@ public class UserService {
         userRepository.save(user);
         LOGGER.info(LogMessage.USER_CREATED, user.getUsername(), user.getId());
 
+        return user;
+    }
+
+    public User changeUserStatus(String id, boolean active) throws ApplicationException {
+        User user = getUser(id);
+        user.setActive(active);
+        userRepository.save(user);
         return user;
     }
 

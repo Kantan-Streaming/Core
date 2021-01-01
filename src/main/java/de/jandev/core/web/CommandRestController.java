@@ -8,6 +8,7 @@ import de.jandev.core.service.CommandService;
 import de.jandev.core.utility.LogMessage;
 import org.slf4j.helpers.MessageFormatter;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -20,18 +21,21 @@ public class CommandRestController implements ApplicationRestController {
         this.commandService = commandService;
     }
 
+    @PreAuthorize("hasAnyAuthority('USER','ADMIN')")
     @GetMapping("/{cmdid}")
     public Command getCommandFromUserById(@PathVariable String id, @PathVariable int cmdid) throws ApplicationException {
         checkAuthorizedUserOwnsRequestedResource(id);
         return commandService.getCommandFromUserById(cmdid).orElseThrow(() -> new ApplicationException(HttpStatus.NOT_FOUND, MessageFormatter.format(LogMessage.COMMAND_NOT_FOUND, id, cmdid).getMessage()));
     }
 
+    @PreAuthorize("hasAnyAuthority('USER','ADMIN')")
     @PostMapping("/actions")
     public ActionCommand createActionCommand(@PathVariable String id, @RequestBody ActionCommand command) throws ApplicationException {
         checkAuthorizedUserOwnsRequestedResource(id);
         return commandService.createActionCommand(id, command);
     }
 
+    @PreAuthorize("hasAnyAuthority('USER','ADMIN')")
     @PostMapping("/texts")
     public SimpleTextCommand createSimpleTextCommand(@PathVariable String id, @RequestBody SimpleTextCommand command) throws ApplicationException {
         checkAuthorizedUserOwnsRequestedResource(id);

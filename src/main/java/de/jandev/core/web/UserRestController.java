@@ -11,7 +11,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @RestController
@@ -24,33 +23,34 @@ public class UserRestController implements ApplicationRestController {
         this.userService = userService;
     }
 
-    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
-    @GetMapping("/{id}")
-    public User getUser(HttpServletRequest request, @PathVariable String id) throws ApplicationException {
-        checkAuthorizedUserOwnsRequestedResource(id);
-//        if (request.isUserInRole("ROLE_ADMIN")) {
-//        }
-        return userService.getUser(id).orElseThrow(() -> new ApplicationException(HttpStatus.NOT_FOUND, MessageFormatter.format(LogMessage.USER_NOT_FOUND, id).getMessage()));
+    // HttpServletRequest can be used to check actual role
+    @PreAuthorize("hasAnyAuthority('USER','ADMIN')")
+    @GetMapping
+    public User getUserSelf() throws ApplicationException {
+        return userService.getUser(getAuthenticatedUserId());
     }
 
-    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
-    @PutMapping("/{id}")
-    public User updateUser(@PathVariable String id, @RequestBody User user) throws ApplicationException {
-        checkAuthorizedUserOwnsRequestedResource(id);
-        return null; // TODO: Implement
+    @PreAuthorize("hasAnyAuthority('USER','ADMIN')")
+    @PostMapping("/activate")
+    public User activateUser() throws ApplicationException {
+        return userService.changeUserStatus(getAuthenticatedUserId(), true);
     }
 
-    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
-    @GetMapping("/{id}/queue")
-    public List<YoutubeRequest> getYouTubeQueueFromUser(@PathVariable String id) throws ApplicationException {
-        checkAuthorizedUserOwnsRequestedResource(id);
-        return userService.getYouTubeQueueFromUser(id);
+    @PreAuthorize("hasAnyAuthority('USER','ADMIN')")
+    @PostMapping("/deactivate")
+    public User deactivateUser() throws ApplicationException {
+        return userService.changeUserStatus(getAuthenticatedUserId(), false);
     }
 
-    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
-    @GetMapping("/{id}/chat")
-    public List<ChatMessage> getChatHistoryFromUser(@PathVariable String id) throws ApplicationException {
-        checkAuthorizedUserOwnsRequestedResource(id);
-        return userService.getChatHistoryFromUser(id);
+    @PreAuthorize("hasAnyAuthority('USER','ADMIN')")
+    @GetMapping("/queue")
+    public List<YoutubeRequest> getYouTubeQueueFromUser() {
+        return userService.getYouTubeQueueFromUser(getAuthenticatedUserId());
+    }
+
+    @PreAuthorize("hasAnyAuthority('USER','ADMIN')")
+    @GetMapping("/chat")
+    public List<ChatMessage> getChatHistoryFromUser() {
+        return userService.getChatHistoryFromUser(getAuthenticatedUserId());
     }
 }

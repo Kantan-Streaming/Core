@@ -46,7 +46,7 @@ public class ApplicationController {
                          @RequestParam(required = false) String error,
                          @RequestParam(required = false) String error_description,
                          HttpServletRequest request,
-                         HttpServletResponse response) {
+                         HttpServletResponse response) throws ApplicationException {
 
         if (error != null) {
             LOGGER.info(MessageFormatter.format(LogMessage.OAUTH_CALLBACK_FAILED, error, error_description).getMessage());
@@ -60,25 +60,27 @@ public class ApplicationController {
         if (token != null) {
             TwitchUser twitchUser = authenticatorService.getTwitchUserFromAccessToken(token);
             if (twitchUser != null) {
-                Optional<User> user = userService.getUser(twitchUser.get_id());
-
-                if (user.isEmpty()) {
+                User user;
+                if(!userService.isUserIdExist(twitchUser.get_id())){
                     User newUser = new User();
                     newUser.setId(twitchUser.get_id());
                     newUser.setUsername(twitchUser.getName());
                     newUser.setActive(false);
-                    newUser.setRoles(Collections.singletonList(Role.ROLE_USER));
+                    newUser.setRoles(Collections.singletonList(Role.USER));
                     try {
-                        user = Optional.of(userService.createUser(newUser));
+                        userService.createUser(newUser);
                     } catch (ApplicationException e) {
-                        LOGGER.warn(LogMessage.USER_CANNOT_CREATE, user, e);
+                        LOGGER.warn(LogMessage.USER_CANNOT_CREATE, newUser, e);
                         response.setHeader(LOCATION, getFullUrl() + "/login?error=true");
                         response.setStatus(302);
                         return;
                     }
+                    user = newUser;
+                }else{
+                    user = userService.getUser(twitchUser.get_id());
                 }
 
-                String jwt = createToken(user.get());
+                String jwt = createToken(user);
                 //Cookie jwtCookie = new Cookie("token", jwt);
                 //jwtCookie.setSecure(true);
                 //jwtCookie.setDomain("kantanbot.com");

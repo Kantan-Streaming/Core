@@ -48,7 +48,7 @@ public class TwitchChatEventHandler {
     private void onChatEvent(ChannelMessageEvent event) {
         User user;
         try {
-            user = userService.getUserByUsername(event.getChannel().getName()).orElseThrow(() -> new ApplicationException(HttpStatus.NOT_FOUND, MessageFormatter.format(LogMessage.USER_NOT_FOUND, event.getChannel().getName()).getMessage()));
+            user = userService.getUserByUsername(event.getChannel().getName());
         } catch (ApplicationException e) {
             LOGGER.info(LogMessage.USER_NOT_FOUND_ON_CHAT, event.getChannel().getName(), e);
             return;
