@@ -58,7 +58,7 @@ Docker Build:
 Deploy Production:
   <<: *deploy
   script:
-    - docker-compose -p "core-$SERVICE_DOMAIN" up -d --force-recreate
+    - docker-compose -p "kantanbotcore-$SERVICE_DOMAIN" up -d --force-recreate
   environment:
     name: production
     url: https://$SERVICE_DOMAIN.kantanbot.com/
@@ -72,7 +72,7 @@ Deploy Production:
 Deploy Develop:
   <<: *deploy
   script:
-    - docker-compose -p "core-$SERVICE_DOMAIN" up -d --force-recreate
+    - docker-compose -p "kantanbotcore-$SERVICE_DOMAIN" up -d --force-recreate
   environment:
     name: develop
     url: https://$SERVICE_DOMAIN.kantanbot.com/
@@ -87,7 +87,7 @@ Deploy Develop:
   image: docker/compose:latest
   stage: stop
   script:
-    - docker-compose -p "core-$SERVICE_DOMAIN" down
+    - docker-compose -p "kantanbotcore-$SERVICE_DOMAIN" down
   tags:
     - docker
   when: manual

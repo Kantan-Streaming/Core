@@ -4,7 +4,7 @@ This file is a running track of new features and fixes to each version of the pr
 
 This project follows [Semantic Versioning](http://semver.org) guidelines.
 
-## v0.0.1 (Insert version name here)
+## v0.0.1 (Insert date here)
 
 ### Added
 
@@ -15,7 +15,7 @@ This project follows [Semantic Versioning](http://semver.org) guidelines.
 * Gitignore file.
 * License file.
 
-## v0.0.0 (Insert version name here)
+## v0.0.0 (Insert date here)
 
 ### Added / Changed / Fixed / Deprecated / Removed / Security
 

@@ -1,0 +1,27 @@
+version: '3.7'
+
+services:
+  coreapi:
+    image: ${IMAGE}
+    container_name: core_$SERVICE_DOMAIN
+    restart: always
+    networks:
+      - traefik_default
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.$SERVICE_DOMAIN.rule=Host(`$SERVICE_DOMAIN.kantanbot.com`)"
+      - "traefik.http.routers.$SERVICE_DOMAIN.entrypoints=websecure"
+      - "traefik.http.routers.$SERVICE_DOMAIN.tls.certresolver=jandevresolver"
+      - "traefik.http.services.$SERVICE_DOMAIN.loadbalancer.server.port=80"
+    environment:
+      - DATABASE_CONNECTION=${DATABASE_CONNECTION:-null}
+      - DATABASE_USERNAME=${DATABASE_USERNAME:-null}
+      - DATABASE_PASSWORD=${DATABASE_PASSWORD:-null}
+      - JWT_SECRET=${JWT_SECRET:-null}
+      - OAUTH_ID=${OAUTH_ID:-null}
+      - OAUTH_SECRET=${OAUTH_SECRET:-null}
+      - OAUTH_CALLBACK=${OAUTH_CALLBACK:-null}
+
+networks:
+  traefik_default:
+    external: true

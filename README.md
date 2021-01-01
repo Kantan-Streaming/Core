@@ -1,16 +1,14 @@
-# Core API Backend
+# KantanBot Core API Backend
 
 ### Description:
 
-* Core API Backend - Backend which utilizes the twitch API to provide functionality
+* KantanBot Core API Backend - Backend which utilizes the twitch API to provide functionality
 
 ### Documentation:
 
 There is no application documentation. However, there is a REST documentation for developers below.
 
 ### Requirements:
-
-Maven is required.
 
 A MariaDB server is required.
 
@@ -20,10 +18,25 @@ You cannot run the application without a profile (--spring-profiles.active)
 
 In order to modify code in your IDE, please make sure that "annotation processing" is enabled.
 
-### Environment Variables (Only production):
+### Instructions for Live Reload
 
+Verify that the option check-box File->Setting –> Build, Execution, Deployment –> Compiler–>Build project automatically
+is selected.
+
+Press SHIFT+CTRL+A for Linux/Windows users or Command+SHIFT+A for Mac users, then type registry in the opened pop-up
+window. Scroll down to Registry... using the down arrow key and hit ENTER on Registry.... In the Registry window verify
+the following option: compiler.automake.allow.when.app.running = true.
+
+### Environment Variables:
+
+* DATABASE_CONNECTION: Full string for database connection
+* DATABASE_USERNAME: Username for the sql database
 * DATABASE_PASSWORD: Password for the sql database
 * JWT_SECRET: JWT secret
+* SERVICE_DOMAIN: devapi/api, version to deploy via CI/CD
+* OAUTH_ID: Twitch oauth id
+* OAUTH_SECRET: Twitch oauth secret
+* OAUTH_CALLBACK: Twitch oauth callback url
 
 ### Execution Variables:
 
@@ -33,7 +46,7 @@ In order to modify code in your IDE, please make sure that "annotation processin
 ### Used Profiles:
 
 1. Default - Never use on a production system!
-2. Production - Changes authentication, variables in properties and possible some other classes. Don't use on locally!
+2. Production - Changes authentication, variables in properties and possible some other classes. Don't use locally!
 
 ### Configuration:
 

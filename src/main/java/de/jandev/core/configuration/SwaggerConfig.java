@@ -38,11 +38,11 @@ public class SwaggerConfig {
 
     private ApiInfo metaData() {
         return new ApiInfoBuilder()
-                .title("Core API Backend REST API")
-                .description("Core API Backend REST API documentation for internal usage.")
+                .title("KantanBot Core API Backend REST API")
+                .description("KantanBot Core API Backend REST API documentation for internal usage.")
                 .version("1.0.0")
-                .license("Proprietary (No license)")
-                .licenseUrl("https://choosealicense.com/no-permission/")
+                .license("GNU AFFERO GENERAL PUBLIC LICENSE 3.0")
+                .licenseUrl("https://www.gnu.org/licenses/agpl-3.0.en.html")
                 .contact(new Contact("Jan Schipper", "https://jandev.de/", "business@jandev.de"))
                 .build();
 
