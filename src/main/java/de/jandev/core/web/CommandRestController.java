@@ -37,5 +37,4 @@ public class CommandRestController implements ApplicationRestController {
         checkAuthorizedUserOwnsRequestedResource(id);
         return commandService.createSimpleTextCommand(id, command);
     }
-
 }

@@ -53,5 +53,4 @@ public class UserRestController implements ApplicationRestController {
         checkAuthorizedUserOwnsRequestedResource(id);
         return userService.getChatHistoryFromUser(id);
     }
-
 }

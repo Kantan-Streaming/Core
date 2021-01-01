@@ -47,6 +47,4 @@ public class SwaggerConfig {
                 .build();
 
     }
-
-
 }

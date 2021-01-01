@@ -1,10 +1,16 @@
 package de.jandev.core.model.twitch;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import lombok.Data;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Setter
+@Getter
 public class TwitchUser {
 
     private String display_name;
@@ -20,5 +26,4 @@ public class TwitchUser {
     private boolean partnered;
     private boolean twitter_connected;
     // Notifications -> push and email not relevant
-
 }

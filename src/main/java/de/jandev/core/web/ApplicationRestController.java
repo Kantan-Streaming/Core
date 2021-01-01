@@ -17,6 +17,4 @@ public interface ApplicationRestController {
     default String getAuthenticatedUserId() {
         return SecurityContextHolder.getContext().getAuthentication().getName();
     }
-
-
 }

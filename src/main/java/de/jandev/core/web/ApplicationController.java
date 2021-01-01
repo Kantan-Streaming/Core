@@ -105,5 +105,4 @@ public class ApplicationController {
         builder.insert(0, "https://");
         return builder.toString();
     }
-
 }

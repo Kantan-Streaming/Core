@@ -1,21 +1,21 @@
 package de.jandev.core.model.command;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 
-import javax.persistence.DiscriminatorValue;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
+import javax.persistence.*;
 
 @EqualsAndHashCode(callSuper = true)
-@Data
 @Entity
+@AllArgsConstructor
+@NoArgsConstructor
+@Setter
+@Getter
 @DiscriminatorValue("2")
 public class ActionCommand extends Command {
 
     @Enumerated(EnumType.STRING)
     private ActionType actionType;
-    private String reply;
 
+    @Column(nullable = false)
+    private String reply;
 }

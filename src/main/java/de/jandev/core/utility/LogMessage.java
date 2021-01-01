@@ -22,5 +22,4 @@ public class LogMessage {
 
     private LogMessage() {
     }
-
 }

@@ -64,5 +64,4 @@ public class UserService {
     public List<ChatMessage> getChatHistoryFromUser(String id) {
         return chatMessageRepository.findAllByUserId(id);
     }
-
 }

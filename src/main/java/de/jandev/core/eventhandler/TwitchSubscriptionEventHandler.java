@@ -18,6 +18,4 @@ public class TwitchSubscriptionEventHandler {
     private void onSubEvent(ChannelSubscribeEvent event) {
         // TODO: Send a chat message and notify the browser source about the subscribe
     }
-
-
 }

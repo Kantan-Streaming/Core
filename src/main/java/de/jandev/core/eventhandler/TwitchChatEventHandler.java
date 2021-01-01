@@ -125,5 +125,4 @@ public class TwitchChatEventHandler {
         youtubeRequest.setUser(user);
         youtubeRequestRepository.save(youtubeRequest);
     }
-
 }
