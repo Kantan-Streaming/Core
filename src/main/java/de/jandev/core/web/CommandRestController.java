@@ -5,14 +5,13 @@ import de.jandev.core.model.command.ActionCommand;
 import de.jandev.core.model.command.Command;
 import de.jandev.core.model.command.SimpleTextCommand;
 import de.jandev.core.service.CommandService;
-import de.jandev.core.utility.LogMessage;
-import org.slf4j.helpers.MessageFormatter;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
-@RequestMapping("/users/{id}/commands")
+@RequestMapping("/commands")
 public class CommandRestController implements ApplicationRestController {
 
     private final CommandService commandService;
@@ -22,23 +21,26 @@ public class CommandRestController implements ApplicationRestController {
     }
 
     @PreAuthorize("hasAnyAuthority('USER','ADMIN')")
-    @GetMapping("/{cmdid}")
-    public Command getCommandFromUserById(@PathVariable String id, @PathVariable int cmdid) throws ApplicationException {
-        checkAuthorizedUserOwnsRequestedResource(id);
-        return commandService.getCommandFromUserById(cmdid).orElseThrow(() -> new ApplicationException(HttpStatus.NOT_FOUND, MessageFormatter.format(LogMessage.COMMAND_NOT_FOUND, id, cmdid).getMessage()));
+    @GetMapping
+    public List<Command> getCommandsFromUser() {
+        return commandService.getCommandsFromUser(getAuthenticatedUserId());
+    }
+
+    @PreAuthorize("hasAnyAuthority('USER','ADMIN')")
+    @GetMapping("/{commandId}")
+    public Command getCommandFromUserById(@PathVariable int commandId) throws ApplicationException {
+        return commandService.getCommandFromUserById(getAuthenticatedUserId(), commandId);
     }
 
     @PreAuthorize("hasAnyAuthority('USER','ADMIN')")
     @PostMapping("/actions")
-    public ActionCommand createActionCommand(@PathVariable String id, @RequestBody ActionCommand command) throws ApplicationException {
-        checkAuthorizedUserOwnsRequestedResource(id);
-        return commandService.createActionCommand(id, command);
+    public ActionCommand createActionCommand(@RequestBody ActionCommand command) throws ApplicationException {
+        return commandService.createActionCommand(getAuthenticatedUserId(), command);
     }
 
     @PreAuthorize("hasAnyAuthority('USER','ADMIN')")
     @PostMapping("/texts")
-    public SimpleTextCommand createSimpleTextCommand(@PathVariable String id, @RequestBody SimpleTextCommand command) throws ApplicationException {
-        checkAuthorizedUserOwnsRequestedResource(id);
-        return commandService.createSimpleTextCommand(id, command);
+    public SimpleTextCommand createSimpleTextCommand(@RequestBody SimpleTextCommand command) throws ApplicationException {
+        return commandService.createSimpleTextCommand(getAuthenticatedUserId(), command);
     }
 }

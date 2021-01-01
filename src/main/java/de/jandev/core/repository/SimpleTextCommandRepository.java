@@ -11,5 +11,7 @@ public interface SimpleTextCommandRepository extends JpaRepository<SimpleTextCom
 
     List<SimpleTextCommand> findAllByName(String name);
 
-    List<SimpleTextCommand> findAllByUserUsername(String user);
+    List<SimpleTextCommand> findAllByUserId(String id);
+
+    boolean existsByPrefixAndNameAndUserId(String prefix, String name, String userId);
 }

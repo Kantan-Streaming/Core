@@ -11,5 +11,7 @@ public interface ActionCommandRepository extends JpaRepository<ActionCommand, In
 
     List<ActionCommand> findAllByName(String name);
 
-    List<ActionCommand> findAllByUserUsername(String user);
+    List<ActionCommand> findAllByUserId(String id);
+
+    boolean existsByPrefixAndNameAndUserId(String prefix, String name, String userId);
 }

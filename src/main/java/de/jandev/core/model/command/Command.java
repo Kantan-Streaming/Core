@@ -27,7 +27,7 @@ public abstract class Command {
     @ManyToOne(optional = false)
     private User user;
 
-    private Character prefix;
+    private String prefix;
 
     private String name;
 

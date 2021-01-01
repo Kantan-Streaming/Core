@@ -10,4 +10,8 @@ import java.util.List;
 public interface CommandRepository extends JpaRepository<Command, Integer> {
 
     List<Command> findAllByName(String name);
+
+    List<Command> findAllByUserId(String id);
+
+    boolean existsByPrefixAndNameAndUserId(String prefix, String name, String userId);
 }

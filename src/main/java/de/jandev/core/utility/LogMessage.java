@@ -8,7 +8,8 @@ public class LogMessage {
     public static final String USER_ID_ALREADY_EXISTS = "User with Id '{}' already exists.";
     public static final String USER_CANNOT_CREATE = "Could not create user with Id '{}'.";
     public static final String USER_CREATED = "User '{}' with Id '{}' created.";
-    public static final String COMMAND_NOT_FOUND = "Command '{}' from User with Id '{}' not found.";
+    public static final String COMMAND_NOT_FOUND = "Command '{}' from user with Id '{}' not found.";
+    public static final String COMMAND_ALREADY_EXISTS = "Command '{}' with prefix '{}' from user with Id '{}' already exists.";
     public static final String OAUTH_CALLBACK_FAILED = "OAuth callback failed. Error: '{}', Description: '{}'.";
     public static final String OAUTH_AUTHENTICATION_FAILED_ACCESS_TOKEN = "OAuth authentication failed. Couldn't get access token from code. Code: '{}'.";
     public static final String OAUTH_AUTHENTICATION_FAILED_USER_ERROR = "OAuth authentication failed. Couldn't get user from access token. Access token: '{}'.";

@@ -16,8 +16,6 @@ import de.jandev.core.service.UserService;
 import de.jandev.core.utility.LogMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.slf4j.helpers.MessageFormatter;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -74,14 +72,14 @@ public class TwitchChatEventHandler {
             extractedCommand = message;
         }
 
-        for (SimpleTextCommand command : simpleTextCommandRepository.findAllByUserUsername(user.getUsername())) {
+        for (SimpleTextCommand command : simpleTextCommandRepository.findAllByUserId(user.getId())) {
             if (command.getFullName().equalsIgnoreCase(extractedCommand)) {
                 event.getTwitchChat().sendMessage(event.getChannel().getName(), command.getText());
                 return;
             }
         }
 
-        for (ActionCommand command : actionCommandRepository.findAllByUserUsername(user.getUsername())) {
+        for (ActionCommand command : actionCommandRepository.findAllByUserId(user.getId())) {
             if (command.getFullName().equalsIgnoreCase(extractedCommand)) {
                 switch (command.getActionType()) {
                     case YOUTUBE:

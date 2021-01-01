@@ -15,11 +15,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Collections;
-import java.util.Optional;
 
 @Controller
 public class ApplicationController {
@@ -61,7 +59,7 @@ public class ApplicationController {
             TwitchUser twitchUser = authenticatorService.getTwitchUserFromAccessToken(token);
             if (twitchUser != null) {
                 User user;
-                if(!userService.isUserIdExist(twitchUser.get_id())){
+                if (!userService.isUserIdExist(twitchUser.get_id())) {
                     User newUser = new User();
                     newUser.setId(twitchUser.get_id());
                     newUser.setUsername(twitchUser.getName());
@@ -76,7 +74,7 @@ public class ApplicationController {
                         return;
                     }
                     user = newUser;
-                }else{
+                } else {
                     user = userService.getUser(twitchUser.get_id());
                 }
 

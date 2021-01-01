@@ -5,11 +5,11 @@ import de.jandev.core.model.chat.ChatMessage;
 import de.jandev.core.model.chat.YoutubeRequest;
 import de.jandev.core.model.user.User;
 import de.jandev.core.service.UserService;
-import de.jandev.core.utility.LogMessage;
-import org.slf4j.helpers.MessageFormatter;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
