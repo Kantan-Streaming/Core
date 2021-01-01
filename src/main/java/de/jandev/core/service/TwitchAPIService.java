@@ -5,9 +5,13 @@ import com.github.philippheuer.events4j.simple.SimpleEventHandler;
 import com.github.twitch4j.TwitchClient;
 import com.github.twitch4j.TwitchClientBuilder;
 import de.jandev.core.model.SystemUser;
+import de.jandev.core.model.timer.RepeatingMessage;
 import de.jandev.core.model.twitch.TwitchToken;
 import de.jandev.core.model.user.User;
+import de.jandev.core.repository.RepeatingMessageRepository;
 import de.jandev.core.repository.SystemUserRepository;
+import de.jandev.core.utility.RepeatingMessageTask;
+import org.springframework.scheduling.TaskScheduler;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
@@ -19,13 +23,17 @@ public class TwitchAPIService {
     private final UserService userService;
     private final AuthenticatorService authenticatorService;
     private final SystemUserRepository systemUserRepository;
+    private final RepeatingMessageRepository repeatingMessageRepository;
+    private final TaskScheduler taskScheduler;
     private TwitchClient twitchClient;
     private SimpleEventHandler simpleEventHandler;
 
-    public TwitchAPIService(UserService userService, AuthenticatorService authenticatorService, SystemUserRepository systemUserRepository) {
+    public TwitchAPIService(UserService userService, AuthenticatorService authenticatorService, SystemUserRepository systemUserRepository, RepeatingMessageRepository repeatingMessageRepository, TaskScheduler taskScheduler) {
         this.userService = userService;
         this.authenticatorService = authenticatorService;
         this.systemUserRepository = systemUserRepository;
+        this.repeatingMessageRepository = repeatingMessageRepository;
+        this.taskScheduler = taskScheduler;
     }
 
     @PostConstruct
@@ -53,6 +61,8 @@ public class TwitchAPIService {
         simpleEventHandler = twitchClient.getEventManager().getEventHandler(SimpleEventHandler.class);
 
         joinChannels();
+
+        initTasks();
     }
 
     private void joinChannels() {
@@ -60,6 +70,12 @@ public class TwitchAPIService {
             if (user.isActive()) {
                 twitchClient.getChat().joinChannel(user.getUsername());
             }
+        }
+    }
+
+    private void initTasks() {
+        for (RepeatingMessage repeatingMessage : repeatingMessageRepository.findAllByActiveIsTrueAndUserActiveIsTrue()) {
+            taskScheduler.scheduleAtFixedRate(new RepeatingMessageTask(repeatingMessage, twitchClient), repeatingMessage.getDelay() * 1000L);
         }
     }
 

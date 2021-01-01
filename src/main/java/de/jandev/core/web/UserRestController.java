@@ -3,13 +3,12 @@ package de.jandev.core.web;
 import de.jandev.core.exception.ApplicationException;
 import de.jandev.core.model.chat.ChatMessage;
 import de.jandev.core.model.chat.YoutubeRequest;
+import de.jandev.core.model.timer.RepeatingMessage;
+import de.jandev.core.model.timer.dto.RepeatingMessageIn;
 import de.jandev.core.model.user.User;
 import de.jandev.core.service.UserService;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -52,5 +51,11 @@ public class UserRestController implements ApplicationRestController {
     @GetMapping("/chat")
     public List<ChatMessage> getChatHistoryFromUser() {
         return userService.getChatHistoryFromUser(getAuthenticatedUserId());
+    }
+
+    @PreAuthorize("hasAnyAuthority('USER','ADMIN')")
+    @PostMapping("/repeatingMessage")
+    public RepeatingMessage createRepeatingMessage(@RequestBody RepeatingMessageIn repeatingMessage) throws ApplicationException {
+        return userService.createRepeatingMessage(getAuthenticatedUserId(), repeatingMessage);
     }
 }

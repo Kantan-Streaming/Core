@@ -3,8 +3,11 @@ package de.jandev.core.service;
 import de.jandev.core.exception.ApplicationException;
 import de.jandev.core.model.chat.ChatMessage;
 import de.jandev.core.model.chat.YoutubeRequest;
+import de.jandev.core.model.timer.RepeatingMessage;
+import de.jandev.core.model.timer.dto.RepeatingMessageIn;
 import de.jandev.core.model.user.User;
 import de.jandev.core.repository.ChatMessageRepository;
+import de.jandev.core.repository.RepeatingMessageRepository;
 import de.jandev.core.repository.UserRepository;
 import de.jandev.core.repository.YoutubeRequestRepository;
 import de.jandev.core.utility.LogMessage;
@@ -23,13 +26,16 @@ public class UserService {
     private final UserRepository userRepository;
     private final YoutubeRequestRepository youtubeRequestRepository;
     private final ChatMessageRepository chatMessageRepository;
+    private final RepeatingMessageRepository repeatingMessageRepository;
 
     public UserService(UserRepository userRepository,
                        YoutubeRequestRepository youtubeRequestRepository,
-                       ChatMessageRepository chatMessageRepository) {
+                       ChatMessageRepository chatMessageRepository,
+                       RepeatingMessageRepository repeatingMessageRepository) {
         this.userRepository = userRepository;
         this.youtubeRequestRepository = youtubeRequestRepository;
         this.chatMessageRepository = chatMessageRepository;
+        this.repeatingMessageRepository = repeatingMessageRepository;
     }
 
     public List<User> getAllUsers() {
@@ -64,6 +70,16 @@ public class UserService {
         LOGGER.info(LogMessage.USER_CREATED, user.getUsername(), user.getId());
 
         return user;
+    }
+
+    public RepeatingMessage createRepeatingMessage(String id, RepeatingMessageIn repeatingMessageIn) throws ApplicationException {
+        RepeatingMessage repeatingMessage = new RepeatingMessage();
+        repeatingMessage.setMessage(repeatingMessageIn.getMessage());
+        repeatingMessage.setActive(repeatingMessageIn.getActive());
+        repeatingMessage.setDelay(repeatingMessageIn.getDelay());
+        repeatingMessage.setUser(getUser(id));
+
+        return repeatingMessageRepository.save(repeatingMessage);
     }
 
     public User changeUserStatus(String id, boolean active) throws ApplicationException {

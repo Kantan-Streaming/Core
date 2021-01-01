@@ -66,14 +66,13 @@ public class ApplicationController {
                     newUser.setActive(false);
                     newUser.setRoles(Collections.singletonList(Role.USER));
                     try {
-                        userService.createUser(newUser);
+                        user = userService.createUser(newUser);
                     } catch (ApplicationException e) {
                         LOGGER.warn(LogMessage.USER_CANNOT_CREATE, newUser, e);
                         response.setHeader(LOCATION, getFullUrl() + "/login?error=true");
                         response.setStatus(302);
                         return;
                     }
-                    user = newUser;
                 } else {
                     user = userService.getUser(twitchUser.get_id());
                 }

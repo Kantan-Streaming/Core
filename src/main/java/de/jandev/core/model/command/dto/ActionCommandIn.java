@@ -22,7 +22,6 @@ public class ActionCommandIn {
     @NotNull
     private ActionType actionType;
 
-    @NotNull
     @Size(min = 1, max = 500)
     private String reply;
 }
