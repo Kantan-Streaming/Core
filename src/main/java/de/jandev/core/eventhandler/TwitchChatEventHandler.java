@@ -72,13 +72,22 @@ public class TwitchChatEventHandler {
             extractedCommand = message;
         }
 
+        if (handleSimpleTextCommand(event, user, extractedCommand)) return;
+
+        handleActionCommand(event, user, message, extractedCommand);
+    }
+
+    private boolean handleSimpleTextCommand(ChannelMessageEvent event, User user, String extractedCommand) {
         for (SimpleTextCommand command : simpleTextCommandRepository.findAllByUserId(user.getId())) {
             if (command.getFullName().equalsIgnoreCase(extractedCommand)) {
                 event.getTwitchChat().sendMessage(event.getChannel().getName(), command.getText());
-                return;
+                return true;
             }
         }
+        return false;
+    }
 
+    private void handleActionCommand(ChannelMessageEvent event, User user, String message, String extractedCommand) {
         for (ActionCommand command : actionCommandRepository.findAllByUserId(user.getId())) {
             if (command.getFullName().equalsIgnoreCase(extractedCommand)) {
                 switch (command.getActionType()) {
