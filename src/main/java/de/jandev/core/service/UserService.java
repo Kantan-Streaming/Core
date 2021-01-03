@@ -10,6 +10,7 @@ import de.jandev.core.repository.ChatMessageRepository;
 import de.jandev.core.repository.RepeatingMessageRepository;
 import de.jandev.core.repository.UserRepository;
 import de.jandev.core.repository.YoutubeRequestRepository;
+import de.jandev.core.security.JwtTokenProvider;
 import de.jandev.core.utility.LogMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,15 +24,18 @@ import java.util.List;
 public class UserService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UserService.class);
+    private final JwtTokenProvider jwtTokenProvider;
     private final UserRepository userRepository;
     private final YoutubeRequestRepository youtubeRequestRepository;
     private final ChatMessageRepository chatMessageRepository;
     private final RepeatingMessageRepository repeatingMessageRepository;
 
-    public UserService(UserRepository userRepository,
+    public UserService(JwtTokenProvider jwtTokenProvider,
+                       UserRepository userRepository,
                        YoutubeRequestRepository youtubeRequestRepository,
                        ChatMessageRepository chatMessageRepository,
                        RepeatingMessageRepository repeatingMessageRepository) {
+        this.jwtTokenProvider = jwtTokenProvider;
         this.userRepository = userRepository;
         this.youtubeRequestRepository = youtubeRequestRepository;
         this.chatMessageRepository = chatMessageRepository;
@@ -95,5 +99,23 @@ public class UserService {
 
     public List<ChatMessage> getChatHistoryFromUser(String id) {
         return chatMessageRepository.findAllByUserId(id);
+    }
+
+    public String createKey(String id) throws ApplicationException {
+        User user = getUser(id);
+        String apiKey = jwtTokenProvider.createToken(user.getId(), user.getRoles());
+        user.setApiKey(apiKey);
+        userRepository.save(user);
+        return apiKey;
+    }
+
+    public String getKey(String id) throws ApplicationException {
+        return getUser(id).getApiKey();
+    }
+
+    public void deleteKey(String id) throws ApplicationException {
+        User user = getUser(id);
+        user.setApiKey(null);
+        userRepository.save(user);
     }
 }

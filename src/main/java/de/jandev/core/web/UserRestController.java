@@ -58,4 +58,22 @@ public class UserRestController implements ApplicationRestController {
     public RepeatingMessage createRepeatingMessage(@RequestBody RepeatingMessageIn repeatingMessage) throws ApplicationException {
         return userService.createRepeatingMessage(getAuthenticatedUserId(), repeatingMessage);
     }
+
+    @PreAuthorize("hasAnyAuthority('USER','ADMIN')")
+    @GetMapping("/key")
+    public String getApiKey() throws ApplicationException {
+        return userService.getKey(getAuthenticatedUserId());
+    }
+
+    @PreAuthorize("hasAnyAuthority('USER','ADMIN')")
+    @PostMapping("/key")
+    public String createApiKey() throws ApplicationException {
+        return userService.createKey(getAuthenticatedUserId());
+    }
+
+    @PreAuthorize("hasAnyAuthority('USER','ADMIN')")
+    @DeleteMapping("/key")
+    public void deleteApiKey() throws ApplicationException {
+        userService.deleteKey(getAuthenticatedUserId());
+    }
 }

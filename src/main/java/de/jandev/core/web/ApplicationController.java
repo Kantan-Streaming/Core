@@ -64,6 +64,7 @@ public class ApplicationController {
                     newUser.setId(twitchUser.get_id());
                     newUser.setUsername(twitchUser.getName());
                     newUser.setActive(false);
+                    newUser.setApiKey(null);
                     newUser.setRoles(Collections.singletonList(Role.USER));
                     try {
                         user = userService.createUser(newUser);
